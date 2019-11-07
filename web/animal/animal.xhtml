@@ -1,0 +1,154 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <h:form >
+                <h:panelGrid style=" width:100%; text-align: right"  >                 
+                    <p:commandLink styleClass="link" value="menu" action="/menu"  />                                  
+                </h:panelGrid>
+            </h:form>
+            <p/>
+            <h:form>
+                <p:commandLink styleClass="link" value="Novo animal" 
+                               action="#{animalControle.abrePopupNovo() }" 
+                               update=":popupNovo" />
+            </h:form> 
+            <p/>
+            <h:form id="formPrincipal" >
+                <p:dataTable var="animal" value="#{animalControle.animais}"
+                             tableStyle="width:auto;  min-width: 100%" > 
+                    <p:column headerText="Id">
+                        <h:outputText value="#{animal.id}" />
+                    </p:column>
+                    <p:column headerText="Tutor:">
+                        <h:outputText value="#{animal.tutor.nome}" />
+                    </p:column>
+                    <p:column headerText="Espécie:">
+                        <h:outputText value="#{animal.especie}" />
+                    </p:column>
+                    <p:column headerText="Raça:">
+                        <h:outputText value="#{animal.raca}" />
+                    </p:column>
+                    <p:column headerText="Nome:">
+                        <h:outputText value="#{animal.nome}" />
+                    </p:column>
+                    <p:column headerText="Idade:">
+                        <h:outputText value="#{animal.idade}" />
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{animalControle.alterar()}" 
+                                       styleClass="link"
+                                       update=":popupAltera" type="button" value="Alterar" >
+                            <f:setPropertyActionListener value="#{animal}" target="#{animalControle.animal}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink styleClass="link" value="Excluir"
+                                       action="#{animalControle.excluir(animal)}"                                             
+                                       update=":formPrincipal" >
+                            <p:confirm header="Excluir animal" 
+                                       message="Você tem certeza que deseja excluir este animal?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>   
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                        <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:outputPanel>
+                </p:confirmDialog> 
+            </h:form>
+
+
+            <p:dialog closable="false" modal="true" header="Novo animal" 
+                      id="popupNovo"  visible="#{animalControle.popupNovo}" >
+                <h:form id="formPopupNovo" >
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Tutor: " />
+                            <p:selectOneMenu id="comboTutores" converter="tutorConverter" 
+                                 required="true" requiredMessage="Selecione um Tutor"  
+                                 value="#{animalControle.animal.tutor}" >
+                            <f:selectItem itemValue="#{null}" itemLabel="Escolha um Tutor" 
+                                  noSelectionOption="false"/>
+                            <f:selectItems value="#{tutorControle.tutores}" 
+                                   var="tut"
+                                   itemValue="#{tut}"
+                                   itemLabel="#{tut.nome}"/>
+                            </p:selectOneMenu>
+                        <p:outputLabel value="Especie "/>
+                        <p:inputText value="#{animalControle.animal.especie}" maxlength="15" 
+                                     required="true" requiredMessage="Espécie obrigatória"/>
+                        <p:outputLabel value="Raça "/>
+                        <p:inputText value="#{animalControle.animal.raca}" maxlength="30"
+                                     required="true" requiredMessage="Raça obrigatória"/>
+                        <p:outputLabel value="Nome "/>
+                        <p:inputText value="#{animalControle.animal.nome}" maxlength="30"
+                                     required="true" requiredMessage="Nome obrigatório"/>
+                        <p:outputLabel value="Idade "/>
+                        <p:inputText value="#{animalControle.animal.idade}" maxlength="10"
+                                     required="true" requiredMessage="Idade obrigatória"/>
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{animalControle.fecharPopupNovo}" 
+                                         update=":formPrincipal, :popupNovo" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{animalControle.inserir()}" 
+                                         update=":popupNovo, :formPrincipal"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages showIcon="false" />
+                    </p:outputPanel>  
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog closable="false" modal="true" header="Alteração"
+                      id="popupAltera"
+                      visible="#{animalControle.popupAltera}" >
+                <h:form id="formPopupAltera">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Tutor: " />
+                            <p:selectOneMenu id="comboTutores" converter="tutorConverter" 
+                                 required="true" requiredMessage="Selecione um Tutor"  
+                                 value="#{animalControle.animal.tutor}" >
+                            <f:selectItem itemValue="#{null}" itemLabel="Escolha um Tutor" 
+                                  noSelectionOption="false"/>
+                            <f:selectItems value="#{animalControle.tutores}" 
+                                   var="tut"
+                                   itemValue="#{tut}"
+                                   itemLabel="#{tut.nome}"/>
+                            </p:selectOneMenu>
+                        <p:outputLabel value="Especie "/>
+                        <p:inputText value="#{animalControle.animal.especie}" maxlength="15" 
+                                     required="true" requiredMessage="Espécie obrigatória"/>
+                        <p:outputLabel value="Raça "/>
+                        <p:inputText value="#{animalControle.animal.raca}" maxlength="30"
+                                     required="true" requiredMessage="Raça obrigatória"/>
+                        <p:outputLabel value="Nome "/>
+                        <p:inputText value="#{animalControle.animal.nome}" maxlength="30"
+                                     required="true" requiredMessage="Nome obrigatório"/>
+                        <p:outputLabel value="Idade "/>
+                        <p:inputText value="#{animalControle.animal.idade}" maxlength="3"
+                                     required="true" requiredMessage="Idade obrigatória"/> 
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{animalControle.fecharPopupAltera()}" 
+                                         update=":popupAltera" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{animalControle.alterarAnimal()}" 
+                                         update=":formPrincipal :popupAltera"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

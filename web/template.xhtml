@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+        <title>Hospital Veterinário UENP</title>
+        <h:outputStylesheet library="css" name="geral.css"/>
+    </h:head>
+    <h:body styleClass="body">
+        <ui:insert name="cabecalho" >
+            <h:form>
+                <p/>
+                <p:panel styleClass="cabecalho" >
+                    <h:panelGrid columns="2" style="width: 100%; text-align: center;">
+                        <h:outputText style="font-size: 28px; color: #000000; " value="Hospital Veterinário"/>
+                        <br />
+                        <h:outputText style="font-size: 28px; color: #000000; " value="UENP"/>
+                    </h:panelGrid>
+                </p:panel>
+                <br/>
+            </h:form>
+        </ui:insert>
+        <ui:insert name="body"/>
+    </h:body>
+</html>

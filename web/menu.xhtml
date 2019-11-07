@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <h:outputStylesheet library="css" name="geral.css"/>
+        <title>Gerenciamento Hospital Veterinário UENP</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+            <h:form>
+                <p/>
+                <p:panel styleClass="cabecalho" >
+                    <h:panelGrid columns="2" style="width: 100%; text-align: center;">
+                        <h:outputText style="font-size: 32px; color: #000000; background-color: #DCDCDC;" value="Hospital Veterinário"/>
+                        <br />
+                        <h:outputText style="font-size: 28px; color: #000000; " value="UENP"/>
+                    </h:panelGrid>
+                </p:panel>
+                <br/>
+            </h:form>
+    <h:body style="background-color: #F8F8FF;">
+        <br />
+        <h:outputText style="font-size: 24px; color: #000000;" value="Gerenciamento do Hospital"/>
+        <br />
+        <br />
+        <br />
+        <p/>
+        <h:link style="font-size: 18px;" outcome="adm/adm" value="Gerenciar Administradores " />
+        <p/>
+        <h:link style="font-size: 18px;" outcome="tutor/tutor" value="Gerenciar Tutores " />
+        <p/>
+        <h:link style="font-size: 18px;" outcome="animal/animal" value="Gerenciar Animais " />
+        <p/>
+        <h:link style="font-size: 18px;" outcome="produto/produto" value="Gerenciar Estoque " />
+        <p/>
+        <h:link style="font-size: 18px;" outcome="index" value="Voltar" />
+    </h:body>
+</html>

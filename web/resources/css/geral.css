@@ -1,0 +1,26 @@
+body {
+    padding: 1%; 
+    background-color: #F8F8FF;
+    font-size: 12px;
+    
+}
+
+.cabecalho{
+    height: 10%; 
+    width: 100%; 
+    background-color: #DCDCDC;
+}
+
+a{
+    text-decoration: none;
+}
+
+.link{
+    color: #00E !important;
+    border-bottom: 1px solid !important;
+    font-size: 14px;
+}
+#linha {
+width: 200%;
+border-bottom: 1px solid #808080;
+}

@@ -1,0 +1,164 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">  
+        <ui:define name="body">
+            <h:form >
+                <h:panelGrid style=" width:100%; text-align: right"  >                 
+                    <p:commandLink styleClass="link" value="menu" action="/menu"  />                                  
+                </h:panelGrid>
+            </h:form>
+            <p/>
+            <h:form>
+                <p:commandLink styleClass="link" value="Novo produto" 
+                               action="#{produtoControle.abrePopupNovo() }" 
+                               update=":popupNovo" />
+            </h:form> 
+            <p/>
+            <h:form id="formPrincipal" >
+                <p:dataTable var="produto" value="#{produtoControle.produtos}"
+                             tableStyle="width:auto;  min-width: 100%" > 
+                    <p:column headerText="Id">
+                        <h:outputText value="#{produto.id}" />
+                    </p:column>
+                    <p:column headerText="Produto:">
+                        <h:outputText value="#{produto.produto}" />
+                    </p:column>
+                    <p:column headerText="Quantidade:">
+                        <h:outputText value="#{produto.quantidade}" />
+                    </p:column>
+                    <p:column headerText="Preço:">
+                        <h:outputText value="#{produto.preco}" />
+                    </p:column>
+                    
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{produtoControle.abrePopupEstoque()}" 
+                                       styleClass="link"
+                                       update=":popupEstoque" type="button" value="Estoque" >
+                            <f:setPropertyActionListener value="#{produto}" target="#{produtoControle.produto}" />
+                        </p:commandLink>
+                    </p:column>
+                    
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink action="#{produtoControle.alterar()}" 
+                                       styleClass="link"
+                                       update=":popupAltera" type="button" value="Alterar" >
+                            <f:setPropertyActionListener value="#{produto}" target="#{produtoControle.produto}" />
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="" style="text-align: center">
+                        <p:commandLink styleClass="link" value="Excluir"
+                                       action="#{produtoControle.excluir(produto)}"                                             
+                                       update=":formPrincipal" >
+                            <p:confirm header="Excluir produto" 
+                                       message="Você tem certeza que deseja excluir este produto?"
+                                       icon="ui-icon-alert"/>
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>   
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                        <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:outputPanel>
+                </p:confirmDialog> 
+            </h:form>
+
+
+            <p:dialog closable="false" modal="true" header="Novo produto" 
+                      id="popupNovo"  visible="#{produtoControle.popupNovo}" >
+                <h:form id="formPopupNovo" >
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Produto "/>
+                        <p:inputText value="#{produtoControle.produto.produto}" maxlength="30"
+                                     required="true" requiredMessage="Produto obrigatório"/>
+                        <p:outputLabel value="Quantidade "/>
+                        <p:inputText value="#{produtoControle.produto.quantidade}" maxlength="5" 
+                                     required="true" requiredMessage="Quantidade obrigatória"/>
+                        <p:outputLabel value="Preço "/>
+                        <p:inputText value="#{produtoControle.produto.preco}" maxlength="10"
+                                     required="true" requiredMessage="Preço obrigatório"/>
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{produtoControle.fecharPopupNovo}" 
+                                         update=":formPrincipal, :popupNovo" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{produtoControle.inserir()}" 
+                                         update=":popupNovo, :formPrincipal"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages showIcon="false" />
+                    </p:outputPanel>  
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog closable="false" modal="true" header="Alteração"
+                      id="popupAltera"
+                      visible="#{produtoControle.popupAltera}" >
+                <h:form id="formPopupAltera">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Produto "/>
+                        <p:inputText value="#{produtoControle.produto.produto}" maxlength="30"
+                                     required="true" requiredMessage="Nome obrigatório"/>
+                        <p:outputLabel value="Quantidade " />
+                        <p:inputText value="#{produtoControle.produto.quantidade}"
+                                    maxlength="5" 
+                                    required="true" requiredMessage="Quantidade obrigatória"/>
+                        <p:outputLabel value="Preço " />
+                        <p:inputText value="#{produtoControle.produto.preco}"
+                                    maxlength="10" 
+                                    required="true" requiredMessage="Preço obrigatório"/>
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{produtoControle.fecharPopupAltera()}" 
+                                         update=":popupAltera" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{produtoControle.alterarTutor()}" 
+                                         update=":formPrincipal :popupAltera"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+            
+            <p:dialog closable="false" modal="true" header="Estoque"
+                      id="popupEstoque"
+                      visible="#{produtoControle.popupEstoque}" >
+                <h:form id="formPopupEstoque">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Produto:"/>
+                        <p:outputLabel value="#{produtoControle.produto.produto}"/>
+                        <p:outputLabel value="Quantidade:" />
+                        <p:outputLabel value="#{produtoControle.produto.quantidade}"/>
+                        <p:selectOneRadio value="#{produtoControle.tipo}">
+                            <f:selectItem itemValue="0" itemLabel="Entrada"/>
+                            <f:selectItem itemValue="1" itemLabel="Saida"/>
+                        </p:selectOneRadio>
+                       
+                        
+                        <p:inputNumber value="#{produtoControle.quantidadeMovimentada}"/>    
+
+                                   
+                    </h:panelGrid>
+                    <p/>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:commandButton value="Cancelar" action="#{produtoControle.fecharPopupEstoque()}" 
+                                         update=":popupEstoque" immediate="true" />
+                        <p:commandButton value="Confirmar" action="#{produtoControle.alterarEstoque()}" 
+                                         update=":formPrincipal :popupEstoque"/>                           
+                    </p:outputPanel>
+                    <p:outputPanel style="width: 100%; text-align:center" >
+                        <p:messages />
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+            
+
+        </ui:define>
+    </ui:composition>
+</html>
